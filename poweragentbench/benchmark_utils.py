@@ -7,16 +7,16 @@ import os
 from pathlib import Path
 from typing import Any
 
-HERE = Path(__file__).resolve().parent
-os.environ.setdefault("MPLCONFIGDIR", str(HERE / ".mplconfig"))
+REPO_ROOT = Path(__file__).resolve().parent.parent
+os.environ.setdefault("MPLCONFIGDIR", str(REPO_ROOT / ".mplconfig"))
 
 import pypsa
 
 TASK_ID = "steady_level_1_case39_easy"
-NETWORK_FILE = HERE / "case39_level1.nc"
-ACTIONSPACE_FILE = HERE / "actionspace.json"
-ACTIONCOST_FILE = HERE / "actioncost.json"
-BASELINE_SUMMARY_FILE = HERE / "baseline_summary.json"
+NETWORK_FILE = REPO_ROOT / "cases" / "case39" / "pypsa" / "case39.nc"
+ACTIONSPACE_FILE = REPO_ROOT / "benchmarks" / "steady" / "level_1" / "actionspace.json"
+ACTIONCOST_FILE = REPO_ROOT / "benchmarks" / "steady" / "level_1" / "actioncost.json"
+BASELINE_SUMMARY_FILE = REPO_ROOT / "benchmarks" / "steady" / "level_1" / "baseline_summary.json"
 
 SCENARIO_LOAD_IDS = ["L10", "L11", "L12", "L14", "L15", "L16", "L17", "L18", "L20"]
 SCENARIO_LOAD_SCALE = 1.25
@@ -50,7 +50,7 @@ def build_pypsa_case39() -> pypsa.Network:
     """Build the IEEE 39-bus system in PyPSA from pandapower's case39 source."""
     import pandapower as pp
     import pandapower.networks as pn
-    from pandapower.converter import to_ppc
+    from pandapower.converter.pypower import to_ppc
 
     pp_net = pn.case39()
     pp.runpp(pp_net)

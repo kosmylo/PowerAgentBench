@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from benchmark_utils import (
+from poweragentbench.benchmark_utils import (
     ACTIONCOST_FILE,
     ACTIONSPACE_FILE,
     NETWORK_FILE,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from benchmark_utils import (
+from poweragentbench.benchmark_utils import (
     ACTIONCOST_FILE,
     ACTIONSPACE_FILE,
     BASELINE_SUMMARY_FILE,

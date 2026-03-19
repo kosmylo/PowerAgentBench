@@ -65,4 +65,3 @@ venv.bak/
 
 # Project specific
 **/.mplconfig/
-**/bench_steady/level_1/.mplconfig/

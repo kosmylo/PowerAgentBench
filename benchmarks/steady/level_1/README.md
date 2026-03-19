@@ -12,8 +12,6 @@ The benchmark is built on top of `pandapower.networks.case39()` and converted in
 
 ## Files
 
-- `case39_level1.nc`
-  - Prepared PyPSA network for the stressed benchmark case.
 - `actionspace.json`
   - Published action contract: limits, step sizes, contingency list, and operating criteria.
 - `actioncost.json`
@@ -22,12 +20,10 @@ The benchmark is built on top of `pandapower.networks.case39()` and converted in
   - Reference no-action evaluation output for the prepared scenario.
 - `solution_template.json`
   - Minimal valid solution file competitors can copy and edit.
-- `benchmark_utils.py`
-  - Shared reference implementation for case construction and scoring.
-- `build_case.py`
-  - Rebuilds the stressed network from the original IEEE 39 source and refreshes `baseline_summary.json`.
-- `evaluate_solution.py`
-  - Scores a competitor solution against the published rules.
+
+Case data lives in `cases/case39/` (PyPSA, MATPOWER, and PandaPower formats).
+Shared code lives in `poweragentbench/benchmark_utils.py`.
+Scripts live in `scripts/` (`build_case.py`, `evaluate_solution.py`, `convert_case.py`).
 
 ## Task Intent
 
@@ -48,7 +44,7 @@ It is still nontrivial because a cheap voltage-only correction does not fully re
 
 ## Scenario Construction
 
-`build_case.py` creates the task case by:
+`scripts/build_case.py` creates the task case by:
 
 1. loading `pandapower.networks.case39()`,
 2. running a source-side AC power flow,
@@ -158,18 +154,26 @@ A fully feasible solution has `remaining_violation_score = 0.0`.
 
 ## How To Rebuild the Benchmark Case
 
-From this folder:
+From the repository root:
 
 ```bash
-python build_case.py
+python scripts/build_case.py
 ```
 
 This will:
 
-- rebuild `case39_level1.nc`
-- recompute `baseline_summary.json`
+- rebuild `cases/case39/pypsa/case39.nc`
+- recompute `benchmarks/steady/level_1/baseline_summary.json`
 
-Use this if you modify `benchmark_utils.py` or want to regenerate the scenario from the original IEEE 39 source.
+Use this if you modify `src/benchmark_utils.py` or want to regenerate the scenario from the original IEEE 39 source.
+
+## How To Export to MATPOWER and PandaPower Formats
+
+```bash
+python scripts/convert_case.py
+```
+
+This creates `cases/case39/matpower/case39.m` and `cases/case39/pandapower/case39.json`.
 
 ## How To Evaluate a Solution
 
@@ -177,7 +181,7 @@ Use this if you modify `benchmark_utils.py` or want to regenerate the scenario f
 2. Run:
 
 ```bash
-python evaluate_solution.py --solution solution_template.json
+python scripts/evaluate_solution.py --solution benchmarks/steady/level_1/solution_template.json
 ```
 
 Example output fields:
@@ -213,7 +217,7 @@ Rules:
 
 ## Recommended Competitor Workflow
 
-1. Load `case39_level1.nc` into PyPSA.
+1. Load `cases/case39/pypsa/case39.nc` into PyPSA (or the PandaPower/MATPOWER equivalents).
 2. Run the base AC power flow.
 3. Identify:
    - overloaded lines,
